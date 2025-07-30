@@ -1,0 +1,152 @@
+[gd_scene load_steps=11 format=3 uid="uid://b1gpt3wcwllld"]
+
+[ext_resource type="Script" uid="uid://dfn077ryde3ob" path="res://main.gd" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://buv6len4vwdfx" path="res://player.tscn" id="2_0xm2m"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7dm0k"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_ig7tw"]
+sky_material = SubResource("ProceduralSkyMaterial_7dm0k")
+
+[sub_resource type="Environment" id="Environment_0xm2m"]
+background_mode = 2
+sky = SubResource("Sky_ig7tw")
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7dm0k"]
+albedo_color = Color(0.0295066, 0.0295066, 0.0295066, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xm2m"]
+albedo_color = Color(1, 0.592798, 0.532572, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h2yge"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bvp3"]
+albedo_color = Color(0.0156863, 1, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lquwl"]
+albedo_color = Color(0, 1, 1, 1)
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_ig7tw")
+player_scene = ExtResource("2_0xm2m")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_0xm2m")
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+use_collision = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+size = Vector3(64, 1, 64)
+material = SubResource("StandardMaterial3D_7dm0k")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1, 0)
+material = SubResource("StandardMaterial3D_0xm2m")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1, 0)
+material = SubResource("StandardMaterial3D_h2yge")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -10)
+material = SubResource("StandardMaterial3D_1bvp3")
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 6.89968)
+material = SubResource("StandardMaterial3D_lquwl")
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.9914, 0.0175347)
+material = SubResource("StandardMaterial3D_lquwl")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="gui_network" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="Host" type="Button" parent="CanvasLayer/gui_network"]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 45.0
+offset_right = 51.0
+offset_bottom = 76.0
+text = "Host"
+
+[node name="Join" type="Button" parent="CanvasLayer/gui_network"]
+layout_mode = 0
+offset_left = 60.0
+offset_top = 45.0
+offset_right = 98.0
+offset_bottom = 76.0
+text = "Join"
+
+[node name="LineEdit_Player" type="LineEdit" parent="CanvasLayer/gui_network"]
+layout_mode = 0
+offset_left = 109.0
+offset_top = 45.0
+offset_right = 177.563
+offset_bottom = 76.0
+placeholder_text = "Player Name"
+
+[node name="gui_lobby" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Start" type="Button" parent="CanvasLayer/gui_lobby"]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 50.0
+offset_right = 61.0
+offset_bottom = 81.0
+text = "Start"
+
+[node name="Quit" type="Button" parent="CanvasLayer/gui_lobby"]
+layout_mode = 0
+offset_left = 69.0
+offset_top = 50.0
+offset_right = 111.0
+offset_bottom = 81.0
+text = "Quit"
+
+[node name="Label_NetworkType" type="Label" parent="CanvasLayer"]
+offset_left = 5.0
+offset_top = 4.0
+offset_right = 47.0
+offset_bottom = 27.0
+text = "None"
+
+[node name="Label_Player" type="Label" parent="CanvasLayer"]
+offset_left = 4.0
+offset_top = 19.0
+offset_right = 53.0
+offset_bottom = 42.0
+text = "Player"
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://buv6len4vwdfx")
+spawn_path = NodePath("..")
+
+[node name="SpawnPoint" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2, 0)
+
+[connection signal="pressed" from="CanvasLayer/gui_network/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="CanvasLayer/gui_network/Join" to="." method="_on_join_pressed"]
+[connection signal="pressed" from="CanvasLayer/gui_lobby/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="CanvasLayer/gui_lobby/Quit" to="." method="_on_quit_pressed"]
