@@ -5,8 +5,10 @@ extends Node3D
 @onready var label_network_type: Label = $CanvasLayer/Label_NetworkType
 @onready var line_edit_player: LineEdit = $CanvasLayer/gui_network/LineEdit_Player
 @onready var label_player: Label = $CanvasLayer/Label_Player
+@onready var gui_game: Control = $CanvasLayer/gui_game
 
 @onready var spawn_point: Node3D = $SpawnPoint
+@onready var start: Button = $CanvasLayer/gui_lobby/Start
 
 
 var peer = ENetMultiplayerPeer.new()
@@ -47,6 +49,7 @@ func _on_join_pressed() -> void:
 	multiplayer.multiplayer_peer = peer
 	gui_network.hide()
 	gui_lobby.show()
+	start.disabled = true #disable button for client
 	
 	network_type = "CLIENT"
 	label_network_type.text = network_type
@@ -65,6 +68,7 @@ func _start_game():
 @rpc("call_local")
 func hide_gui_lobby():
 	gui_lobby.hide()
+	gui_game.show()
 
 @rpc("any_peer", "reliable")
 func _register_player(new_player_info):
@@ -96,7 +100,6 @@ func set_player_position(pid:int, pos:Vector3):
 	player.set_global_position(pos)
 	pass
 
-
 func exit_game(id):
 	multiplayer.peer_disconnected.connect(del_player)
 	del_player(id)
@@ -106,13 +109,19 @@ func del_player(id):
 	
 @rpc("any_peer","call_local")
 func _del_player(id):
-	get_node(str(id)).queue_free()
+	var player  = get_node_or_null(str(id))
+	print("del player", player)
+	if player:
+		player.queue_free()
 	#pass
 
 func _on_start_pressed() -> void:
 	_start_game()
+	
 	pass
 
+# test close for del player event
 func _on_quit_pressed() -> void:
-	
+	multiplayer.multiplayer_peer.close()
+	get_tree().quit()
 	pass

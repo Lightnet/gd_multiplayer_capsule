@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b1gpt3wcwllld"]
+[gd_scene load_steps=12 format=3 uid="uid://b1gpt3wcwllld"]
 
 [ext_resource type="Script" uid="uid://dfn077ryde3ob" path="res://scripts/main.gd" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://buv6len4vwdfx" path="res://scenes/player.tscn" id="2_0xm2m"]
@@ -27,8 +27,11 @@ albedo_color = Color(1, 0, 0, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bvp3"]
 albedo_color = Color(0.0156863, 1, 1, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lquwl"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0wfyh"]
 albedo_color = Color(0, 1, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lquwl"]
+albedo_color = Color(0, 1, 0, 1)
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_ig7tw")
@@ -63,7 +66,7 @@ material = SubResource("StandardMaterial3D_1bvp3")
 
 [node name="CSGBox3D5" type="CSGBox3D" parent="CSGCombiner3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 6.89968)
-material = SubResource("StandardMaterial3D_lquwl")
+material = SubResource("StandardMaterial3D_0wfyh")
 
 [node name="CSGBox3D6" type="CSGBox3D" parent="CSGCombiner3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.9914, 0.0175347)
@@ -130,7 +133,7 @@ offset_left = 5.0
 offset_top = 4.0
 offset_right = 47.0
 offset_bottom = 27.0
-text = "None"
+text = "Network"
 
 [node name="Label_Player" type="Label" parent="CanvasLayer"]
 offset_left = 4.0
@@ -138,6 +141,22 @@ offset_top = 19.0
 offset_right = 53.0
 offset_bottom = 42.0
 text = "Player"
+
+[node name="gui_game" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="Quit" type="Button" parent="CanvasLayer/gui_game"]
+layout_mode = 0
+offset_left = 224.0
+offset_top = 9.0
+offset_right = 266.0
+offset_bottom = 40.0
+text = "Quit"
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://buv6len4vwdfx")
@@ -150,3 +169,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2, 0)
 [connection signal="pressed" from="CanvasLayer/gui_network/Join" to="." method="_on_join_pressed"]
 [connection signal="pressed" from="CanvasLayer/gui_lobby/Start" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="CanvasLayer/gui_lobby/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="CanvasLayer/gui_game/Quit" to="." method="_on_quit_pressed"]
