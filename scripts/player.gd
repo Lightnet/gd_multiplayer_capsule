@@ -14,7 +14,7 @@ func _ready() -> void:
 	camera.current = is_multiplayer_authority()
 	pass
 
-func _input(event: InputEvent) -> void:
+func _input(_event: InputEvent) -> void:
 	if not is_multiplayer_authority():
 		return
 	#if event is InputEventMouseMotion:

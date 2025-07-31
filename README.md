@@ -12,7 +12,8 @@
 	- check for if node3d player exist to delete.
 - Player
 	- Control movement key board default W,A,S,D
-	- rotate = Mouse Input
+	- Camera rotate = Mouse Input
+	- Jump =  Space Key
 
 # credits:
 - https://www.youtube.com/watch?v=WiHjHQe8PGg

@@ -61,8 +61,8 @@ func _start_game():
 		hide_gui_lobby.rpc()
 		add_player()
 		
-		for peer in multiplayer.get_peers():
-			add_player(peer)
+		for peer_id in multiplayer.get_peers():
+			add_player(peer_id)
 			pass
 
 @rpc("call_local")
@@ -117,11 +117,11 @@ func _del_player(id):
 
 func _on_start_pressed() -> void:
 	_start_game()
-	
-	pass
+	#pass
 
 # test close for del player event
 func _on_quit_pressed() -> void:
-	multiplayer.multiplayer_peer.close()
+	if multiplayer.multiplayer_peer:
+		multiplayer.multiplayer_peer.close()
 	get_tree().quit()
-	pass
+	#pass
