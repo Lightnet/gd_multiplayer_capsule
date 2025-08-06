@@ -3,12 +3,15 @@ extends Node3D
 @onready var gui_lobby: Control = $CanvasLayer/gui_lobby
 @onready var gui_network: Control = $CanvasLayer/gui_network
 @onready var label_network_type: Label = $CanvasLayer/VBoxContainer/HBoxContainer/Label_NetworkType
-@onready var line_edit_player: LineEdit = $CanvasLayer/gui_network/LineEdit_Player
+@onready var line_edit_player: LineEdit = $CanvasLayer/gui_network/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/LineEdit_Player
 @onready var label_player: Label = $CanvasLayer/VBoxContainer/HBoxContainer2/Label_Player
 @onready var gui_game: Control = $CanvasLayer/gui_game
 @onready var spawn_point: Node3D = $SpawnPoint
 @onready var start: Button = $CanvasLayer/gui_lobby/Start
 @onready var label_counts: Label = $CanvasLayer/VBoxContainer/HBoxContainer3/Label_Counts
+
+@onready var line_edit_address: LineEdit = $CanvasLayer/gui_network/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LineEdit_Address
+@onready var line_edit_port: LineEdit = $CanvasLayer/gui_network/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2/LineEdit_Port
 
 var peer = ENetMultiplayerPeer.new()
 @export var player_scene:PackedScene
@@ -28,12 +31,24 @@ func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_player_connected)
 	multiplayer.peer_disconnected.connect(_on_player_disconnected)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
+	multiplayer.connection_failed.connect(_on_connected_fail)
 	line_edit_player.text = Global.generate_random_name()
+
+# note this has delay or say try to connect to server
+func _on_connected_fail():
+	print("connect fail")
+	multiplayer.multiplayer_peer.close()
+	multiplayer.multiplayer_peer = null
+	gui_network.show()
+	gui_lobby.hide()
+	#pass
 
 func _on_host_pressed() -> void:
 	player_info["name"] = line_edit_player.text
 	label_player.text = line_edit_player.text
-	peer.create_server(1027)
+	var port:int = line_edit_port.text.to_int()
+	if port:
+		peer.create_server(port)
 	multiplayer.multiplayer_peer = peer
 	#multiplayer.peer_connected.connect(add_player)
 	#add_player()
@@ -45,8 +60,13 @@ func _on_host_pressed() -> void:
 func _on_join_pressed() -> void:
 	player_info["name"] = line_edit_player.text
 	label_player.text = line_edit_player.text
-	peer.create_client("127.0.0.1",1027)
-	multiplayer.multiplayer_peer = peer
+	var port:int = line_edit_port.text.to_int()
+	var address:String = line_edit_address.text
+		
+	peer.create_client(address, port)
+	#multiplayer.multiplayer_peer = peer
+	multiplayer.set_multiplayer_peer(peer)
+	
 	gui_network.hide()
 	gui_lobby.show()
 	start.disabled = true #disable button for client
