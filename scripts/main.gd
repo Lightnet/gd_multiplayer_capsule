@@ -2,14 +2,13 @@ extends Node3D
 
 @onready var gui_lobby: Control = $CanvasLayer/gui_lobby
 @onready var gui_network: Control = $CanvasLayer/gui_network
-@onready var label_network_type: Label = $CanvasLayer/Label_NetworkType
+@onready var label_network_type: Label = $CanvasLayer/VBoxContainer/HBoxContainer/Label_NetworkType
 @onready var line_edit_player: LineEdit = $CanvasLayer/gui_network/LineEdit_Player
-@onready var label_player: Label = $CanvasLayer/Label_Player
+@onready var label_player: Label = $CanvasLayer/VBoxContainer/HBoxContainer2/Label_Player
 @onready var gui_game: Control = $CanvasLayer/gui_game
-
 @onready var spawn_point: Node3D = $SpawnPoint
 @onready var start: Button = $CanvasLayer/gui_lobby/Start
-
+@onready var label_counts: Label = $CanvasLayer/VBoxContainer/HBoxContainer3/Label_Counts
 
 var peer = ENetMultiplayerPeer.new()
 @export var player_scene:PackedScene
@@ -28,6 +27,7 @@ var player_info = {"name": "Name"}
 func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_player_connected)
 	multiplayer.peer_disconnected.connect(_on_player_disconnected)
+	multiplayer.server_disconnected.connect(_on_server_disconnected)
 	line_edit_player.text = Global.generate_random_name()
 
 func _on_host_pressed() -> void:
@@ -55,7 +55,7 @@ func _on_join_pressed() -> void:
 	label_network_type.text = network_type
 	#pass
 
-func _start_game():
+func _start_game()->void:
 	if multiplayer.is_server():
 		print("init game")
 		hide_gui_lobby.rpc()
@@ -66,25 +66,34 @@ func _start_game():
 			pass
 
 @rpc("call_local")
-func hide_gui_lobby():
+func hide_gui_lobby()->void:
 	gui_lobby.hide()
 	gui_game.show()
 
 @rpc("any_peer", "reliable")
-func _register_player(new_player_info):
+func _register_player(new_player_info)->void:
 	var new_player_id = multiplayer.get_remote_sender_id()
 	players[new_player_id] = new_player_info
 	#player_connected.emit(new_player_id, new_player_info)
 
 # When a peer connects, send them my player info.
 # This allows transfer of all desired data for each player, not only the unique ID.
-func _on_player_connected(id):
+func _on_player_connected(id)->void:
 	_register_player.rpc_id(id, player_info)
+	label_counts.text = str(len(multiplayer.get_peers()))
 	
-func _on_player_disconnected(id):
+func _on_player_disconnected(id)->void:
 	players.erase(id)
 	del_player(id)
+	label_counts.text = str(len(multiplayer.get_peers()))
 	#player_disconnected.emit(id)
+
+func _on_server_disconnected()->void:
+	if multiplayer.multiplayer_peer:
+		multiplayer.multiplayer_peer.close()
+	gui_game.hide()
+	gui_network.show()
+	#pass
 
 func add_player(pid:int = 1)->void:
 	var player = player_scene.instantiate()
@@ -95,20 +104,22 @@ func add_player(pid:int = 1)->void:
 	#pass
 
 @rpc("call_local")
-func set_player_position(pid:int, pos:Vector3):
+func set_player_position(pid:int, pos:Vector3)->void:
 	var player = get_node(str(pid))
 	player.set_global_position(pos)
 	pass
 
-func exit_game(id):
+func exit_game(id)->void:
 	multiplayer.peer_disconnected.connect(del_player)
 	del_player(id)
 	
-func del_player(id):
+# delete player from event disconnect
+func del_player(id)->void:
 	rpc("_del_player",id)
-	
+
+# sync to remove player id
 @rpc("any_peer","call_local")
-func _del_player(id):
+func _del_player(id) -> void:
 	var player  = get_node_or_null(str(id))
 	print("del player", player)
 	if player:

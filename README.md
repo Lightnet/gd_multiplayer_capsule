@@ -9,11 +9,12 @@
 - Lobby
 - Spawn Position Test
 - Disconnected
-	- check for if node3d player exist to delete.
+	- check for if Node3D player exist to delete.
 - Player
 	- Control movement key board default W,A,S,D
 	- Camera rotate = Mouse Input
 	- Jump =  Space Key
+	- Escape Key to stop mouse capture.
 
 # credits:
 - https://www.youtube.com/watch?v=WiHjHQe8PGg

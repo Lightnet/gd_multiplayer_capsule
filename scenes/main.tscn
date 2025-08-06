@@ -37,6 +37,10 @@ albedo_color = Color(0, 1, 0, 1)
 script = ExtResource("1_ig7tw")
 player_scene = ExtResource("2_0xm2m")
 
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://buv6len4vwdfx")
+spawn_path = NodePath("..")
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
 shadow_enabled = true
@@ -74,93 +78,119 @@ material = SubResource("StandardMaterial3D_lquwl")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 122.0
+offset_bottom = 81.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Network:"
+
+[node name="Label_NetworkType" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "None"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Player:"
+
+[node name="Label_Player" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "None"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Client counts:"
+
+[node name="Label_Counts" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "0"
+
 [node name="gui_network" type="Control" parent="CanvasLayer"]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 1.0
+offset_top = 80.0
+offset_right = 192.0
+offset_bottom = 124.0
 mouse_filter = 2
 
 [node name="Host" type="Button" parent="CanvasLayer/gui_network"]
 layout_mode = 0
-offset_left = 7.0
-offset_top = 45.0
-offset_right = 51.0
-offset_bottom = 76.0
+offset_left = 10.0
+offset_top = 7.0
+offset_right = 54.0
+offset_bottom = 38.0
 text = "Host"
 
 [node name="Join" type="Button" parent="CanvasLayer/gui_network"]
 layout_mode = 0
 offset_left = 60.0
-offset_top = 45.0
+offset_top = 7.0
 offset_right = 98.0
-offset_bottom = 76.0
+offset_bottom = 38.0
 text = "Join"
 
 [node name="LineEdit_Player" type="LineEdit" parent="CanvasLayer/gui_network"]
 layout_mode = 0
-offset_left = 109.0
-offset_top = 45.0
-offset_right = 177.563
-offset_bottom = 76.0
+offset_left = 104.0
+offset_top = 7.0
+offset_right = 172.563
+offset_bottom = 38.0
 placeholder_text = "Player Name"
 
 [node name="gui_lobby" type="Control" parent="CanvasLayer"]
 visible = false
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_top = 80.0
+offset_right = 137.0
+offset_bottom = 120.0
 
 [node name="Start" type="Button" parent="CanvasLayer/gui_lobby"]
 layout_mode = 0
-offset_left = 15.0
-offset_top = 50.0
-offset_right = 61.0
-offset_bottom = 81.0
+offset_left = 13.0
+offset_top = 4.0
+offset_right = 59.0
+offset_bottom = 35.0
 text = "Start"
 
 [node name="Quit" type="Button" parent="CanvasLayer/gui_lobby"]
 layout_mode = 0
-offset_left = 69.0
-offset_top = 50.0
-offset_right = 111.0
-offset_bottom = 81.0
-text = "Quit"
-
-[node name="Label_NetworkType" type="Label" parent="CanvasLayer"]
-offset_left = 5.0
+offset_left = 65.0
 offset_top = 4.0
-offset_right = 47.0
-offset_bottom = 27.0
-text = "Network"
-
-[node name="Label_Player" type="Label" parent="CanvasLayer"]
-offset_left = 4.0
-offset_top = 19.0
-offset_right = 53.0
-offset_bottom = 42.0
-text = "Player"
+offset_right = 107.0
+offset_bottom = 35.0
+text = "Quit"
 
 [node name="gui_game" type="Control" parent="CanvasLayer"]
 visible = false
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 1.0
+offset_top = 79.0
+offset_right = 130.0
+offset_bottom = 124.0
 mouse_filter = 2
 
 [node name="Quit" type="Button" parent="CanvasLayer/gui_game"]
 layout_mode = 0
-offset_left = 224.0
-offset_top = 9.0
-offset_right = 266.0
-offset_bottom = 40.0
+offset_left = 10.0
+offset_top = 7.0
+offset_right = 52.0
+offset_bottom = 38.0
 text = "Quit"
-
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://buv6len4vwdfx")
-spawn_path = NodePath("..")
 
 [node name="SpawnPoint" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2, 0)

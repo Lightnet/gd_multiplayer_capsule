@@ -12,7 +12,7 @@ func _enter_tree() -> void:
 	
 func _ready() -> void:
 	camera.current = is_multiplayer_authority()
-	pass
+	#pass
 
 func _input(_event: InputEvent) -> void:
 	if not is_multiplayer_authority():
@@ -42,7 +42,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event is InputEventMouseMotion:
 			#print(event)
 			#print(event.relative)
-			neck.rotate_y(-event.relative.x * 0.01)
+			#neck.rotate_y(-event.relative.x * 0.01)
+			rotate_y(-event.relative.x * 0.01)
 			camera.rotate_x(-event.relative.y * 0.01)
 			camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-30), deg_to_rad(60))
 		pass
@@ -62,7 +63,8 @@ func _physics_process(delta: float) -> void:
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
 	#var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	var direction = (neck.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	#var direction = (neck.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
